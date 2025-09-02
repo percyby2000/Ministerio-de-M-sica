@@ -1,0 +1,17 @@
+{
+  "name": "ladpmusicahuamanga",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@fontsource-variable/cinzel": "^5.2.6",
+    "@fontsource/barlow-condensed": "^5.2.6",
+    "@fontsource/instrument-serif": "^5.2.6",
+    "astro": "^5.13.5"
+  }
+}

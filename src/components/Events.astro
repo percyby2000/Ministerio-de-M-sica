@@ -1,0 +1,438 @@
+---
+---
+
+<section id="events" class="events-section">
+  <div class="container">
+    <h2 class="section-title reveal-element">Próximos Eventos</h2>
+    
+    <!-- Controles de navegación para móvil -->
+    <div class="events-controls">
+      <button class="events-control prev" aria-label="Evento anterior">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <button class="events-control next" aria-label="Siguiente evento">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="events-container">
+      <div class="events-grid">
+        <div class="event-card reveal-element" data-delay="100">
+          <div class="event-date">
+            <span class="day">15</span>
+            <span class="month">Dic</span>
+          </div>
+          <div class="event-details">
+            <div class="event-tag">Aniversario</div>
+            <h3>106° Aniversario LADP Huamanga</h3>
+            <p class="event-time">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              6:00 PM
+            </p>
+            <p class="event-location">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              Templo Central LADP
+            </p>
+            <p class="event-description">Celebración especial del 106° aniversario de la Iglesia LADP Huamanga. Una noche de gratitud, adoración y testimonio de la fidelidad de Dios a través de los años.</p>
+            <a href="#contact" class="event-button">Más información</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Animación de elementos al hacer scroll
+    const revealElements = document.querySelectorAll('.reveal-element');
+    
+    const revealOnScroll = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const delayAttr = entry.target.getAttribute('data-delay');
+          const delay = delayAttr ? parseInt(delayAttr) : 0;
+          setTimeout(() => {
+            entry.target.classList.add('revealed');
+          }, delay);
+          revealOnScroll.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+    
+    revealElements.forEach(element => {
+      revealOnScroll.observe(element);
+    });
+    
+    // Navegación de eventos en móvil
+    const eventsGrid = document.querySelector('.events-grid');
+    const prevBtn = document.querySelector('.events-control.prev');
+    const nextBtn = document.querySelector('.events-control.next');
+    
+    if (eventsGrid && prevBtn && nextBtn) {
+      let scrollAmount = 0;
+      const scrollStep = 320; // Aproximadamente el ancho de una tarjeta + margen
+      
+      prevBtn.addEventListener('click', () => {
+        scrollAmount = Math.max(0, scrollAmount - scrollStep);
+        eventsGrid.scrollTo({
+          left: scrollAmount,
+          behavior: 'smooth'
+        });
+      });
+      
+      nextBtn.addEventListener('click', () => {
+        scrollAmount = Math.min(
+          eventsGrid.scrollWidth - eventsGrid.clientWidth,
+          scrollAmount + scrollStep
+        );
+        eventsGrid.scrollTo({
+          left: scrollAmount,
+          behavior: 'smooth'
+        });
+      });
+      
+      eventsGrid.addEventListener('scroll', () => {
+        const isAtStart = eventsGrid.scrollLeft === 0;
+        const isAtEnd = eventsGrid.scrollLeft >= eventsGrid.scrollWidth - eventsGrid.clientWidth - 10;
+        
+        prevBtn.classList.toggle('disabled', isAtStart);
+        nextBtn.classList.toggle('disabled', isAtEnd);
+        
+        scrollAmount = eventsGrid.scrollLeft;
+      });
+      
+      // Inicializar estado de los botones
+      prevBtn.classList.add('disabled');
+    }
+  });
+</script>
+
+<style>
+  .events-section {
+    padding: 5rem 0;
+    background-color: #ffffff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    position: relative;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--primary-blue);
+    position: relative;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: var(--primary-orange);
+    transition: width 0.3s ease;
+  }
+
+  .section-title:hover::after {
+    width: 120px;
+  }
+
+  /* Controles de navegación para móvil */
+  .events-controls {
+    display: none;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .events-control {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+
+  .events-control:hover {
+    background-color: var(--primary-orange);
+    transform: scale(1.1);
+  }
+
+  .events-control.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .events-container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    justify-content: center;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .event-card {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    height: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .event-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+  }
+
+
+
+  .event-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-orange);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .day {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .month {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+  }
+
+
+
+  .event-details {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .event-tag {
+    display: inline-block;
+    background-color: rgba(var(--primary-blue-rgb), 0.1);
+    color: var(--primary-blue);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .event-details h3 {
+    font-size: 1.4rem;
+    margin: 0 0 1rem;
+    color: var(--primary-blue);
+    transition: color 0.3s ease;
+  }
+
+  .event-card:hover .event-details h3 {
+    color: var(--primary-orange);
+  }
+
+  .event-time,
+  .event-location {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+  }
+
+  .icon {
+    margin-right: 0.5rem;
+    color: var(--primary-orange);
+  }
+
+  .event-description {
+    margin: 1rem 0;
+    font-size: 0.95rem;
+    color: #4b5563;
+    line-height: 1.6;
+    flex-grow: 1;
+  }
+
+  .event-button {
+    display: inline-block;
+    background-color: transparent;
+    color: var(--primary-blue);
+    border: 1px solid var(--primary-blue);
+    padding: 0.6rem 1.2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    margin-top: auto;
+    align-self: flex-start;
+  }
+
+  .event-button:hover {
+    background-color: var(--primary-orange);
+    color: white;
+    border-color: var(--primary-orange);
+    transform: translateY(-3px);
+  }
+
+
+
+  /* Animaciones */
+  .reveal-element {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+  }
+
+  .reveal-element.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 992px) {
+    .events-grid {
+      grid-template-columns: 1fr;
+      max-width: 450px;
+      gap: 1.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .events-section {
+      padding: 4rem 0;
+    }
+
+    .events-controls {
+      display: flex;
+    }
+
+    .events-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 1rem;
+    }
+
+    .events-grid {
+      display: flex;
+      grid-template-columns: none;
+      gap: 1.2rem;
+      padding: 0.5rem 0;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      max-width: none;
+      margin: 0;
+    }
+
+    .event-card {
+      flex: 0 0 90%;
+      min-width: 300px;
+      scroll-snap-align: center;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .event-details h3 {
+      font-size: 1.3rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .events-section {
+      padding: 3rem 0;
+    }
+
+    .event-card {
+      flex: 0 0 90%;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+    }
+
+    .event-date {
+      padding: 0.8rem;
+    }
+
+    .day {
+      font-size: 1.8rem;
+    }
+
+    .month {
+      font-size: 0.9rem;
+    }
+
+    .event-details {
+      padding: 1.2rem;
+    }
+
+    .event-details h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .event-description {
+      font-size: 0.9rem;
+      margin: 0.8rem 0;
+    }
+
+    .event-button {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+  }
+</style>
